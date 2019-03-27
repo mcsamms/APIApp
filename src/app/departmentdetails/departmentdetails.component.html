@@ -1,0 +1,69 @@
+
+<!-- Spinner indicator for loading and deleted-->
+<div *ngIf="!depLoaded && !depDeleted">
+  Loading...<br />
+  <img src="../../assets/loading.gif" alt="" />
+</div>
+<!-- Render the HTML form controls if the department is defined and has been retrieved from the Web WPI-->
+<div *ngIf="depLoaded && department">
+    <table>
+        <tr *ngIf="department.departmentId">
+            <td>Id:</td>            
+            <td>
+                <!-- Bind the Id to display in the table-->
+                {{department.departmentId}}
+            </td>
+        </tr>
+        <tr>
+        <td>Department Name:</td>
+        <td>
+            <!-- Set Angular two-way binding to the form control and deparment model property name-->
+            <input type="text" [(ngModel)]="department.name" /></td>
+        </tr>
+        <tr>
+        <td>Group Name:</td>
+        <td>
+            <!-- Set Angular two-way binding to the form control and deparment model property group name-->
+            <input type="text" [(ngModel)]="department.groupName" />
+            </td>
+        </tr>
+        <tr *ngIf="department.departmentId">
+            <td>Last Modified:</td>
+            <td>
+                <!-- Bind the modfied date to display in the table-->
+                {{department.modifiedDate}}
+            </td>
+        </tr>
+    </table>
+    <!-- 
+        Set click event handler and call saveDepartment to save department changes
+        Use ngIf directive so the save only displays if we have retrieved a department
+    -->
+    <button *ngIf="department.departmentId" (click)="saveDepartment()">Save</button>
+    <!-- 
+        Set click event handler and call deleteDepartment to delete a departmennt
+        Use ngIf directive so the delete only displays if we have retrieved a department
+    -->
+    <button *ngIf="department.departmentId" (click)="deleteDepartment()">Delete</button>
+
+     <!-- 
+        Set click event handler and call createDepartment to create a new department
+        Use ngIf directive so the create only displays if we have no department has been retrieved. Show
+        form in create mode    
+    -->
+    <button *ngIf="!department.departmentId" (click)="createDepartment()">Create</button> 
+    
+    <!-- Show spinner when processing HTTP POST and waiting for response-->
+	<span *ngIf="depSaving">Processing...<br /><img src="../../assets/loading.gif" alt="" /></span>
+</div>
+
+<div>{{this.message}}</div>
+<ul>
+    <!--
+        Display any errors
+    -->
+  <li *ngFor="let error of departmentService.errors">
+    {{error}}
+  </li>
+</ul>
+

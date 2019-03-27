@@ -1,0 +1,48 @@
+<!-- Message for displaying feedback to the user-->
+<div style="color:red;font-weight: bold;">
+    {{message}}
+</div>
+<!--Loading indicator for -->
+<div *ngIf="!depLoaded" style="text-align: center;">
+  Loading...<br />
+  <img src="../../assets/loading.gif" alt="" />
+</div>
+
+<!-- <ul>
+    
+  <!-- <li *ngFor="let dept of departments"> -->
+    <!-- <span>{{dept.name}}</span> -->
+  <!-- </li>
+</ul> --> 
+
+<!--
+    Render a dropdown list of Departments
+
+    The #selectedDepartments in the select control is a variable that holds the state of the control. When we
+    do this we have access to all properties of the select control, one being he current selected "value" property.
+    In our case, the value is bound to the departmentId (the primary key). We can use this in the 
+    "change" event to call the component getDeartment. Note the # is not used when referencing the control variable
+-->
+<select *ngIf="depLoaded" name="selectedDepartments" #selectedDepartmentsControlVariable (change)="getDepartment(selectedDepartmentsControlVariable.value)">
+  <option value="">--Select Department--</option>
+  <!-- Use an ngFor loop to populate all departments in the select options-->
+  <option *ngFor="let dept of departments" [value]="dept.departmentId">{{dept.name}}</option>
+</select> 
+<!-- Loading indiciator for an individual department retrieve. When the user selects a department from the dropdown list-->
+<span *ngIf="!depRetrieveLoaded"><img src="../../assets/loading.gif" alt="" style="height:20px;width:20px;"/></span>
+
+<!--Details view of the department. Bind and alloow a user to navigate to the department details component using a routeLink using the departmentId-->
+<div *ngIf="selectedDepartment">
+    <label>Department Id:</label>
+    <span>{{selectedDepartment.departmentId}}</span><br />
+    <label>Department Name:</label>
+    <span>{{selectedDepartment.name}}</span><br />
+    <label>Group Name:</label>
+    <span>{{selectedDepartment.groupName}}</span><br />
+    <label>Last Modified:</label>
+    <span>{{selectedDepartment.modifiedDate}}</span><br />
+
+    <!--Link to the department details component via routing using the URL-->
+    <a routerLink="/department/{{selectedDepartment.departmentId}}"><button>Details</button></a>
+    <router-outlet></router-outlet>
+</div>

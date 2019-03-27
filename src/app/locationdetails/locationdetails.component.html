@@ -1,0 +1,75 @@
+
+<!-- Spinner indicator for loading and deleted-->
+<div *ngIf="!locLoaded && !locDeleted">
+    Loading...<br />
+    <img src="../../assets/loading.gif" alt="" />
+  </div>
+  <!-- Render the HTML form controls if the department is defined and has been retrieved from the Web WPI-->
+  <div *ngIf="locLoaded && location">
+      <table>
+          <tr *ngIf="location.locationId">
+              <td>Id:</td>            
+              <td>
+                  <!-- Bind the Id to display in the table-->
+                  {{location.locationId}}
+              </td>
+          </tr>
+          <tr>
+          <td>Location Name:</td>
+          <td>
+              <!-- Set Angular two-way binding to the form control and location model property name-->
+              <input type="text" [(ngModel)]="location.name" /></td>
+          </tr>
+          <tr>
+            <td>Cost Rate:</td>
+            <td>
+              <!-- Set Angular two-way binding to the form control and lcoation model property cost rate-->
+              <input type="text" [(ngModel)]="location.costRate" type="number" />
+              </td>
+          </tr>
+          <tr>
+            <td>Availability:</td>
+            <td>
+              <!-- Set Angular two-way binding to the form control and lcoation model availability-->
+              <input type="text" [(ngModel)]="location.availability" type="number"/>
+              </td>
+          </tr>
+          <tr *ngIf="location.locationId">
+              <td>Last Modified:</td>
+              <td>
+                  <!-- Bind the modfied date to display in the table-->
+                  {{location.modifiedDate}}
+              </td>
+          </tr>
+      </table>
+      <!-- 
+          Set click event handler and call saveDepartment to save location changes
+          Use ngIf directive so the save only displays if we have retrieved a location
+      -->
+      <button *ngIf="location.locationId" (click)="saveLocation()">Save</button>
+      <!-- 
+          Set click event handler and call deleteLocation to delete location
+          Use ngIf directive so the delete only displays if we have retrieved a location
+      -->
+      <button *ngIf="location.locationId" (click)="deleteLocation()">Delete</button>
+  
+       <!-- 
+          Set click event handler and call createDepartment to create a new department
+          Use ngIf directive so the create only displays if we have no department has been retrieved. Show
+          form in create mode    
+      -->
+      <button *ngIf="!location.locationId" (click)="createLocation()">Create</button> 
+      
+      <!-- Show spinner when processing HTTP POST and waiting for response-->
+      <span *ngIf="locSaving">Processing...<br /><img src="../../assets/loading.gif" alt="" /></span>
+  </div>
+  
+  <div>{{this.message}}</div>
+  <ul>
+      <!--
+          Display any errors
+      -->
+    <li *ngFor="let error of locationService.errors">
+      {{error}}
+    </li>
+  </ul>

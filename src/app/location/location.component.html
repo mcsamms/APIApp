@@ -1,0 +1,37 @@
+<!-- Message for displaying feedback to the user-->
+<div style="color:red;font-weight: bold;">
+    {{message}}
+</div>
+<!--Loading indicator for -->
+<div *ngIf="!locLoaded" style="text-align: center;">
+  Loading...<br />
+  <img src="../../assets/loading.gif" alt="" />
+</div>
+
+<!--
+    Render a dropdown list of Locations
+-->
+<select *ngIf="locLoaded" name="selectedLocations" #selectedLocation (change)="getLocation(selectedLocation.value)">
+  <option value="">--Select Location--</option>
+  <!-- Use an ngFor loop to populate all locations in the select options-->
+  <option *ngFor="let loc of locations" [value]="loc.locationId">{{loc.name}}</option>
+</select> 
+<!-- Loading indiciator for an individual location retrieve. When the user selects a location from the dropdown list-->
+<span *ngIf="!locRetrieveLoaded"><img src="../../assets/loading.gif" alt="" style="height:20px;width:20px;"/></span>
+
+<!--Details view of the location. Bind and alloow a user to navigate to the location details component using a routeLink using the locationId-->
+<div *ngIf="selectedLocation">
+    <label>Location Id:</label>
+    <span>{{selectedLocation.locationId}}</span><br />
+    <label>Location Name:</label>
+    <span>{{selectedLocation.name}}</span><br />
+    <label>Availability:</label>
+    <span>{{selectedLocation.availability}}</span><br />
+    <label>Cost Rate:</label>
+    <span>{{selectedLocation.costRate | currency}}</span><br />
+    <label>Modfied Date:</label>
+    <span>{{selectedLocation.modifiedDate}}</span><br />
+    <!--Link to the location details component via routing using the URL-->
+    <a routerLink="/location/{{selectedLocation.locationId}}"><button>Details</button></a>
+    <router-outlet></router-outlet>
+</div>
